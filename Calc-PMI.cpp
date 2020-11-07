@@ -8,11 +8,10 @@ typedef long long ll;
 typedef double db;
 const int N=1e6+5,mo=1e9+7;
 const db EEE=2.71828182845904523536028747;
-set<string> tr;
+set<string> tr,pstrs,nstrs;
 multiset<string>trtemp;
 map<pair<string,string>,int> union_p;
 map<string,int> single_p;
-vector<string> pstrs,nstrs;
 string str,str1;
 struct rec
 {
@@ -21,7 +20,7 @@ struct rec
 };
 bool operator<(rec a,rec b)
 {
-	return a.so_PMI>b.so_PMI;
+	return a.so_PMI<b.so_PMI;
 }
 vector<rec> final;
 char s[10005],s1[10005];
@@ -38,7 +37,7 @@ void load_data();
 void calc_PMI();
 int main()
 {
-	system("python FST.py");
+//	system("python divide_words.py");
 	filter_EN();
 	filter_CH_punc();
 	load_seed();
@@ -46,6 +45,7 @@ int main()
 	calc_PMI();
 	freopen("result.txt","w",stdout);
 	for(auto prt:final) 
+	if (pstrs.find(prt.str)==pstrs.end()&&nstrs.find(prt.str)==nstrs.end())
 	{
 		cout<<prt.str<<' '<<prt.so_PMI<<'\n';
 	}
@@ -113,9 +113,9 @@ void load_seed()
 			strncpy(s1,s+i,j-i+1);
 			s1[j-i+1]=0;
 			str=s1;
-			pstrs.push_back(str);
+			pstrs.insert(str);
 			i=j;
-			cout<<str<<'\n';
+			//cout<<str<<'\n';
 		}
 		fo(i,0,len-1) s[i]=0;
 	}
@@ -131,9 +131,9 @@ void load_seed()
 			strncpy(s1,s+i,j-i+1);
 			s1[j-i+1]=0;
 			str=s1;
-			nstrs.push_back(str);
+			nstrs.insert(str);
 			i=j;
-			cout<<str<<'\n';
+			//cout<<str<<'\n';
 		}
 		fo(i,0,len-1) s[i]=0;
 	}
@@ -180,7 +180,7 @@ void calc_PMI()
 	for (auto tar_str:tr)
 	{
 		db psum=0,nsum=0,val=0;
-		if (single_p[tar_str]<10) continue;
+	//	if (single_p[tar_str]<10) continue;
 		for (auto ps:pstrs)
 		{
 			f12=union_p[make_pair(tar_str,ps)];
